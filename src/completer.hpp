@@ -14,9 +14,6 @@ public:
 
   QString currentText() const;
 
-Q_SIGNALS:
-  void wordChanged(const QString &);
-
 private:
   QStringList m_list;
 };

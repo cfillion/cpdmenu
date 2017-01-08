@@ -29,7 +29,7 @@ private:
   void send();
   void cursorMoved(const int, const int);
   void selectionChanged();
-  void replaceWord(const QString &);
+  void replaceWord();
 
   int m_promptSize;
   Completer *m_completer;

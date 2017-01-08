@@ -10,10 +10,6 @@ Completer::Completer(const QStringList &list, QWidget *parent)
   setSortingEnabled(true);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
-  connect(this, &QListWidget::currentRowChanged, [=] {
-    Q_EMIT wordChanged(currentText());
-  });
-
   trigger({});
 }
 

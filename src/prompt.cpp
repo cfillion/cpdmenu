@@ -15,7 +15,7 @@ Prompt::Prompt(Completer *completer, QWidget *parent)
   connect(this, &QLineEdit::cursorPositionChanged, this, &Prompt::cursorMoved);
   connect(this, &QLineEdit::selectionChanged, this, &Prompt::selectionChanged);
 
-  connect(m_completer, &Completer::wordChanged, this, &Prompt::replaceWord);
+  connect(m_completer, &Completer::currentItemChanged, this, &Prompt::replaceWord);
 }
 
 void Prompt::setPrompt(const QString &prompt)
@@ -70,12 +70,13 @@ void Prompt::selectionChanged()
     setSelection(m_promptSize, text().size());
 }
 
-void Prompt::replaceWord(const QString &newText)
+void Prompt::replaceWord()
 {
-  blockSignals(true);
+  const QString &newText = m_completer->currentText();
+
+  QSignalBlocker blocker(this);
   setText(newText);
   setCursorPosition(m_promptSize + newText.size());
-  blockSignals(false);
 }
 
 void Prompt::keyPressEvent(QKeyEvent *event)
