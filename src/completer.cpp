@@ -10,11 +10,16 @@ Completer::Completer(const QStringList &list, QWidget *parent)
   setSortingEnabled(true);
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+  connect(this, &QListWidget::currentRowChanged, [=] {
+    Q_EMIT wordChanged(currentText());
+  });
+
   trigger({});
 }
 
 void Completer::trigger(const QString &input)
 {
+  QSignalBlocker blocker(this);
   clear();
 
   for(const QString &word : m_list) {
@@ -22,14 +27,15 @@ void Completer::trigger(const QString &input)
       addItem(word);
   }
 
-  blockSignals(true);
   setCurrentRow(0);
-  blockSignals(false);
 }
 
 QString Completer::currentText() const
 {
-  return currentItem()->text();
+  if(const QListWidgetItem *item = currentItem())
+    return item->text();
+  else
+    return {};
 }
 
 void Completer::move(const int movement)
@@ -38,5 +44,4 @@ void Completer::move(const int movement)
   const int row = (currentRow() + movement) % size;
 
   setCurrentRow(row > -1 ? row : size - 1);
-  wordChanged(currentText());
 }
