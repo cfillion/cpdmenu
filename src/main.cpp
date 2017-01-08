@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QCommandLineParser>
 #include <QDesktopWidget>
 #include <QHBoxLayout>
 #include <QTextStream>
@@ -9,6 +10,16 @@
 int main(int argc, char *argv[])
 {
   QApplication app(argc, argv);
+
+  const QCommandLineOption promptOpt({"p", "prompt"},
+    "Change the prompt label.", "TEXT", ">");
+
+  QCommandLineParser parser;
+  parser.addHelpOption();
+  parser.addOption(promptOpt);
+  parser.process(app);
+
+  const QString &promptText = parser.value(promptOpt);
 
   QStringList list;
   QTextStream input(stdin);
@@ -27,7 +38,9 @@ int main(int argc, char *argv[])
 
   Completer completer(list);
   Prompt prompt(&completer);
-  prompt.setPrompt("> ");
+
+  if(!promptText.isEmpty())
+    prompt.setPrompt(promptText + ' ');
 
   QHBoxLayout layout;
   layout.setSpacing(5);

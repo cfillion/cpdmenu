@@ -8,8 +8,9 @@ Completer::Completer(const QStringList &list, QWidget *parent)
   setFocusPolicy(Qt::NoFocus);
   setFrameShape(QFrame::NoFrame);
   setSortingEnabled(true);
-
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+  trigger({});
 }
 
 void Completer::trigger(const QString &input)
